@@ -2,6 +2,14 @@
 minimalist url brute force script in Perl
 
 # usage
+
+- help
+```
+➜ ./pdirb.plx -h                                         
+usage: ./pdirb.plx -w [wordlist] -u [url]
+```
+
+- with arguments
 ```
 ➜ ./pdirb.plx -u http://localhost:8000 -w ./wordlist.txt
 
@@ -22,7 +30,8 @@ minimalist url brute force script in Perl
 [✔] http://localhost:8000/pdirb/
 [x] http://localhost:8000/index.html
 ```
-or
+
+- without arguments
 ```
 ➜ ./pdirb.plx                                           
 
