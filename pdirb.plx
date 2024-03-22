@@ -5,7 +5,7 @@ use HTTP::Tiny;
 use Getopt::Long;
 use Term::ANSIColor qw(:constants);
 
-my $usage = "usage: $0 -w [wordlist] -u [url]\n";
+my $usage = "usage: $0 -w [wordlist] -u [[http/https]://url]\n";
 GetOptions (
     'url=s' => \my $target,
     'wordlist=s' => \my $wordlist,
@@ -14,11 +14,11 @@ GetOptions (
 
 my $logo =
 "
-     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄  ▄▄▄ ▄▄▄▄▄▄   ▄▄▄▄▄▄▄ 
+     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄  ▄▄▄ ▄▄▄▄▄▄   ▄▄▄▄▄▄▄
     █       █      ██   █   ▄  █ █  ▄    █
     █    ▄  █  ▄    █   █  █ █ █ █ █▄█   █
     █   █▄█ █ █ █   █   █   █▄▄█▄█       █
-    █    ▄▄▄█ █▄█   █   █    ▄▄  █  ▄   █ 
+    █    ▄▄▄█ █▄█   █   █    ▄▄  █  ▄   █
     █   █   █       █   █   █  █ █ █▄█   █
     █▄▄▄█   █▄▄▄▄▄▄██▄▄▄█▄▄▄█  █▄█▄▄▄▄▄▄▄█
 
@@ -36,8 +36,8 @@ open my $WORDLIST, '<', $wordlist
 
 while(my $line = <$WORDLIST>) {
     chomp $line;
-    # add '/' if it's a directory
-    $line .= $line =~ /\.[^\.]*$/ ? '' : '/' ;
+    # append '/' if it's a directory
+    $line .= '/' unless $line =~ /\.[^.]+$/;
     my $res = HTTP::Tiny->new->get("$target/$line");
     if($res->{success}) {
         print GREEN, "[✔] $target/$line\n", RESET;
@@ -45,3 +45,5 @@ while(my $line = <$WORDLIST>) {
         print RED, "[x] $target/$line\n", RESET;
     }
 }
+
+close($WORDLIST);
